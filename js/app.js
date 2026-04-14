@@ -5,7 +5,9 @@ let cantidades = {};
 
 async function cargarProductos() {
     try {
-        const respuesta = await fetch(URL_SHEET);
+        // Agregamos un timestamp a la URL de forma oculta para asegurar que el navegador siempre 
+        // pida la versión más fresca posible y eluda el caché local.
+        const respuesta = await fetch(URL_SHEET + "&_t=" + new Date().getTime());
         const datos = await respuesta.text();
         const filas = datos.split("\n").slice(1);
 
