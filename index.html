@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Cobro - Tiendita</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Configuración para Tailwind en CDN -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', "Liberation Mono", "Courier New", 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos de la Aplicación -->
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body class="text-slate-200 h-screen flex flex-col overflow-hidden selection:bg-emerald-500/30">
+
+    <!-- Navbar / Total (Sticky Header) -->
+    <header class="glass-panel z-20 shrink-0 shadow-lg shadow-black/20">
+        <div class="max-w-7xl mx-auto px-4 py-4 md:py-5 flex flex-col sm:flex-row justify-between items-center gap-4">
+
+            <!-- Logo Section -->
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
+                <div
+                    class="bg-gradient-to-br from-emerald-400 to-teal-500 p-2.5 rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.3)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-900" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-white tracking-tight leading-none">Mi Tiendita</h1>
+                    <p class="text-xs text-slate-400 mt-1 font-medium tracking-wide uppercase">Punto de Venta</p>
+                </div>
+            </div>
+
+            <!-- Total de Compra -->
+            <div class="w-full sm:w-auto relative group">
+                <div
+                    class="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500">
+                </div>
+                <div
+                    class="relative bg-slate-900/80 rounded-2xl px-6 py-3 border border-white/10 flex flex-col items-center sm:items-end min-w-[200px]">
+                    <span class="text-slate-400 text-[10px] font-bold tracking-widest uppercase mb-0.5">Total a
+                        Cobrar</span>
+                    <div class="flex items-start text-emerald-400 font-mono tracking-tight transition-transform duration-200"
+                        id="total-container">
+                        <span class="text-2xl mt-1 font-semibold opacity-80">$</span>
+                        <span id="total" class="text-4xl md:text-5xl font-bold"
+                            style="text-shadow: 0 0 24px rgba(52,211,153,0.3);">0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Área Principal de Productos (Cambiante según pantalla) -->
+    <main
+        class="flex-1 overflow-y-auto w-full relative scroll-smooth bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800/40 via-slate-900 to-slate-900">
+        <div class="max-w-7xl mx-auto px-4 py-6 md:py-8 md:px-8 pb-32 md:pb-36">
+
+            <div class="flex justify-between items-end mb-6 border-b border-slate-700/50 pb-3">
+                <h2 class="text-lg md:text-xl font-semibold text-slate-200 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Catálogo
+                </h2>
+                <!-- Pequeña guía de uso en el UI -->
+                <span class="text-xs text-slate-500 font-medium">Toca para sumar, el botón rojo resta</span>
+            </div>
+
+            <!-- Contenedor Grid (Inyectado por app.js) -->
+            <div id="lista-productos"
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
+
+                <!-- Estado Carga (Loader interactivo) -->
+                <div class="col-span-full flex flex-col items-center justify-center py-20 text-slate-400 gap-4">
+                    <div class="relative w-12 h-12">
+                        <div class="absolute inset-0 rounded-full border-t-2 border-emerald-500 animate-spin"></div>
+                        <div class="absolute inset-2 rounded-full border-r-2 border-teal-500 animate-spin"
+                            style="animation-direction: reverse; animation-duration: 0.8s;"></div>
+                    </div>
+                    <p class="font-medium animate-pulse text-sm">Sincronizando inventario...</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Barra Inferior Flotante (Botones de acción) -->
+    <div
+        class="fixed bottom-0 left-0 right-0 p-4 md:p-6 pointer-events-none z-30 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent pt-12">
+        <div
+            class="max-w-md mx-auto bg-slate-800/90 backdrop-blur-md p-2 rounded-2xl flex gap-2 shadow-[0_8px_32px_rgba(0,0,0,0.5)] pointer-events-auto border border-slate-700/50">
+
+            <!-- Botón Borrar -->
+            <button onclick="limpiar()"
+                class="flex-1 py-3.5 px-4 bg-slate-800/50 hover:bg-rose-500/10 text-rose-400 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 border border-transparent hover:border-rose-500/30 group active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:rotate-12 transition-transform"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                <span class="hidden xs:inline">Borrar todo</span>
+                <span class="xs:hidden">Borrar</span>
+            </button>
+
+            <!-- Botón Copiar -->
+            <button onclick="copiarTotal()"
+                class="flex-1 py-3.5 px-4 bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-900 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:-translate-y-0.5 active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                </svg>
+                Copiar
+            </button>
+
+        </div>
+    </div>
+
+    <!-- Área de Notificaciones (Toasts) -->
+    <div class="fixed top-4 sm:top-auto sm:bottom-28 left-0 right-0 z-50 pointer-events-none flex flex-col items-center gap-2"
+        id="toast-container">
+    </div>
+
+    <!-- Scripts de la Aplicación -->
+    <script src="./js/app.js"></script>
+
+</body>
+
+</html>

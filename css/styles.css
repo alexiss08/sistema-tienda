@@ -1,0 +1,32 @@
+body {
+    background-color: #0f172a; /* tailwind slate-900 */
+}
+
+/* Scrollbar premium y delgada */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #334155; 
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #475569; 
+}
+
+/* Panel difuminado - Cristal */
+.glass-panel {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Mejora de interacción táctil en móviles para evitar el zoom molesto al tocar rápido */
+button, .tarjeta-producto {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
